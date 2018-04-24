@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECA2LD
+namespace Assets.Scripts.ECA2LD
 {
     public static class StringExtensions
     {

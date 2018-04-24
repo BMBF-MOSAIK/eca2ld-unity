@@ -33,7 +33,7 @@ namespace Assets.Scripts.ECA2LD
             var components = gameObject.GetComponents(typeof(Component));
             foreach (Component c in components)
             {
-                var componentUri = new Uri(dp_uri + "/" + c.GetType());
+                var componentUri = new Uri(dp_uri.TrimEnd('/') + "/" + c.GetType());
                 RDFGraph.Assert(new Triple(un, DCT_HAS_PART, RDFGraph.CreateUriNode(componentUri)));
             }
         }

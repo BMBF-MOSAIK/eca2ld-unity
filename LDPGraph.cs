@@ -50,11 +50,6 @@ namespace Assets.Scripts.ECA2LD
 
         public string GetTTL()
         {
-            Console.WriteLine("TTL Graph requested. Should contain following triples:");
-            foreach (Triple t in RDFGraph.Triples)
-            {
-                Console.WriteLine(t.ToString());
-            }
             System.IO.StringWriter sw = new System.IO.StringWriter();
             writer.Save(RDFGraph, sw);
             return sw.ToString();

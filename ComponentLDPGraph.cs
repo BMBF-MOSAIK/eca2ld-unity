@@ -14,6 +14,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -31,7 +32,7 @@ namespace Assets.Scripts.ECA2LD
         {
             this.c = c;
             this.u = u;
-            n_c = RDFGraph.CreateLiteralNode(c.name, "xsd:string");
+            n_c = RDFGraph.CreateLiteralNode(c.GetType().ToString(), "xsd:string");
             BuildRDFGraph();
         }
 
@@ -42,7 +43,7 @@ namespace Assets.Scripts.ECA2LD
             RDFGraph.Assert(new Triple(un, DCT_IS_PART_OF, GetContainingEntityURI()));
             RDFGraph.Assert(new Triple(un, LDP_HASMEMBERRELATION, DCT_HAS_PART));
 
-            var definedByUri = new Uri(u.getPrototypeBaseUri() + c.name + "/");
+            var definedByUri = new Uri(u.getPrototypeBaseUri() + c.GetType().ToString() + "/");
             RDFGraph.Assert(new Triple(un, RDFS_IS_DEFINED_BY, RDFGraph.CreateUriNode(definedByUri)));
 
             CreateAttributeTriples();
@@ -50,13 +51,16 @@ namespace Assets.Scripts.ECA2LD
 
         private IUriNode GetContainingEntityURI()
         {
-            string entityUri = dp_uri.Replace("/" + c.name, "");
+            string entityUri = dp_uri.Replace("/" + c.GetType().ToString(), "");
             return RDFGraph.CreateUriNode(new Uri(entityUri));
         }
 
         private void CreateAttributeTriples()
         {
-            // TODO: Check in which fashion to identify attributes in Unity model
+            foreach (var f in c.GetType().GetProperties())
+            {
+                RDFGraph.Assert(new Triple(un, DCT_HAS_PART, RDFGraph.CreateUriNode(new Uri(u + f.Name + "/"))));
+            }
         }
     }
 }

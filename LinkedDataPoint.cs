@@ -8,41 +8,31 @@ using System.Threading.Tasks;
 using UnityEngine;
 using VDS.RDF;
 
-public abstract class LinkedDataPoint : MonoBehaviour
+public abstract class LinkedDataPoint
 {
-
+    protected GameObject gameObject;
     protected HttpListener Endpoint;
-    protected Queue<Action> pendingActions;
+    protected TTLSerializer serializer;
     protected LDPGraph LDPGraph;
     protected string uri;
-  
+
     public string Name;
 
     // Use this for initialization
-    protected void Start()
+    protected LinkedDataPoint(GameObject gameObject)
     {
-        BuildUri();
-        pendingActions = new Queue<Action>();
+        this.gameObject = gameObject;
+        Name = gameObject.GetComponent<LDEntity>().EntityName;
+        serializer = gameObject.GetComponent<TTLSerializer>();
+    }
+
+    protected void initializeHttpListener(string uri)
+    {
+        this.uri = uri;
         Endpoint = new HttpListener();
         Endpoint.Prefixes.Add(uri);
         Endpoint.Start();
         Task.Factory.StartNew(listen);
-    }
-
-    protected void Update()
-    {
-        lock (pendingActions)
-        {
-            if (pendingActions.Count > 0)
-            {
-                var action = pendingActions.Dequeue();
-                action.Invoke();
-            }
-        }
-    }
-
-    protected virtual void BuildUri()
-    {        
     }
 
     protected void listen()
@@ -52,18 +42,10 @@ public abstract class LinkedDataPoint : MonoBehaviour
 
         while (Endpoint.IsListening)
         {
-            var c = Endpoint.GetContext();
-            byte[] responseBuffer;
-
-            lock (pendingActions)
+            if (serializer != null)
             {
-                pendingActions.Enqueue(() =>
-                {
-                    responseBuffer = System.Text.Encoding.UTF8.GetBytes(LDPGraph.GetTTL());
-                    c.Response.OutputStream.Write(responseBuffer, 0, responseBuffer.Length);
-                    c.Response.OutputStream.Flush();
-                    c.Response.OutputStream.Close();
-                });
+                var c = Endpoint.GetContext();
+                serializer.SerializeTTL(LDPGraph, c);
             }
         }
     }

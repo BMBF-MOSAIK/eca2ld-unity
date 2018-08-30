@@ -13,9 +13,9 @@ public class LDPEntity : LinkedDataPoint
 
     private List<LDPComponent> ComponentEndpoints;
 
-    public LDPEntity(GameObject gameObject) : base(gameObject)
+    public LDPEntity(GameObject gameObject, string hostAddress, int hostPort) : base(gameObject)
     {
-        uri = "http://localhost:12345/test/" + Name + "/";
+        uri = "http://" + hostAddress + ":" + hostPort + "/" + Name + "/";
         LDPGraph = new EntityLDPGraph(new System.Uri(uri), gameObject);
         initializeHttpListener(uri);
         CreateComponentEndpoints();

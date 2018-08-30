@@ -39,6 +39,7 @@ namespace Assets.Scripts.ECA2LD
                 pendingActions.Enqueue(() =>
                 {
                     responseBuffer = System.Text.Encoding.UTF8.GetBytes(graph.GetTTL());
+                    c.Response.ContentType = "text/turtle";
                     c.Response.OutputStream.Write(responseBuffer, 0, responseBuffer.Length);
                     c.Response.OutputStream.Flush();
                     c.Response.OutputStream.Close();

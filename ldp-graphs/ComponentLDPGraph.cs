@@ -11,6 +11,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTH
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using Assets.Scripts.eca2ld_unity.ld_components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Assets.Scripts.ECA2LD
         {
             this.c = c;
             this.u = u;
-            n_c = RDFGraph.CreateLiteralNode(c.GetType().ToString(), "xsd:string");
+            n_c = RDFGraph.CreateLiteralNode(c.GetType().ToString(), new Uri("xsd:string"));
             BuildRDFGraph();
         }
 
@@ -57,9 +58,11 @@ namespace Assets.Scripts.ECA2LD
 
         private void CreateAttributeTriples()
         {
-            foreach (var f in c.GetType().GetProperties())
+            foreach (var f in c.GetType().GetFields())
             {
-                RDFGraph.Assert(new Triple(un, DCT_HAS_PART, RDFGraph.CreateUriNode(new Uri(u + f.Name + "/"))));
+                var attr = (IsLDAttribute[])f.GetCustomAttributes(typeof(IsLDAttribute), false);
+                if(attr.Length > 0)
+                    RDFGraph.Assert(new Triple(un, DCT_HAS_PART, RDFGraph.CreateUriNode(new Uri(u + f.Name + "/"))));
             }
         }
     }

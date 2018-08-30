@@ -30,6 +30,10 @@ public abstract class LinkedDataPoint
         this.gameObject = gameObject;
         Name = gameObject.GetComponent<LDEntity>().EntityName;
         serializer = gameObject.GetComponent<TTLSerializer>();
+        if(serializer == null)
+        {
+            Debug.LogWarning("No TTL Serializer attached to entity " + Name + "! Attach TTL serializer to enable publishing as Linked Entity");
+        }
     }
 
     protected void initializeHttpListener(string uri)

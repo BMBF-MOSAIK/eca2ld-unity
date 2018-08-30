@@ -21,4 +21,9 @@ public class LDEntity : MonoBehaviour
     {
 
     }
+
+    private void OnApplicationQuit()
+    {
+        entity.Shutdown();
+    }
 }

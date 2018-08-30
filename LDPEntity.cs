@@ -21,6 +21,16 @@ public class LDPEntity : LinkedDataPoint
         CreateComponentEndpoints();
     }
 
+    public override void Shutdown()
+    {
+        foreach (LDPComponent c in ComponentEndpoints)
+        {
+            c.Shutdown();
+        }
+
+        base.Shutdown();
+    }
+
     private void CreateComponentEndpoints()
     {
         ComponentEndpoints = new List<LDPComponent>();

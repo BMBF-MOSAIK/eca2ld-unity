@@ -15,8 +15,14 @@ public abstract class LinkedDataPoint
     protected TTLSerializer serializer;
     protected LDPGraph LDPGraph;
     protected string uri;
+    protected bool isActive = true;
 
     public string Name;
+
+    public virtual void Shutdown()
+    {
+        isActive = false;
+    }
 
     // Use this for initialization
     protected LinkedDataPoint(GameObject gameObject)
@@ -37,16 +43,19 @@ public abstract class LinkedDataPoint
 
     protected void listen()
     {
+        Console.WriteLine("Listening");
         while (!Endpoint.IsListening)
             Thread.Sleep(10);
 
-        while (Endpoint.IsListening)
+        while (Endpoint.IsListening && isActive)
         {
             if (serializer != null)
             {
                 var c = Endpoint.GetContext();
+                Console.WriteLine("Received request on " + c.Request.Url);
                 serializer.SerializeTTL(LDPGraph, c);
             }
         }
+        Console.WriteLine("Shutting down datapoint " + uri);
     }
 }

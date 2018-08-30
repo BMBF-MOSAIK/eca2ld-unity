@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.eca2ld_unity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,8 +34,11 @@ namespace Assets.Scripts.ECA2LD
             var components = gameObject.GetComponents(typeof(Component));
             foreach (Component c in components)
             {
-                var componentUri = new Uri(dp_uri.TrimEnd('/') + "/" + c.GetType() + "/");
-                RDFGraph.Assert(new Triple(un, DCT_HAS_PART, RDFGraph.CreateUriNode(componentUri)));
+                if (c is LDComponent)
+                {
+                    var componentUri = new Uri(dp_uri.TrimEnd('/') + "/" + c.GetType() + "/");
+                    RDFGraph.Assert(new Triple(un, DCT_HAS_PART, RDFGraph.CreateUriNode(componentUri)));
+                }
             }
         }
     }

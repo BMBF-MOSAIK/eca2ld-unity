@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.ECA2LD;
+using Assets.Scripts.eca2ld_unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,7 +37,8 @@ public class LDPEntity : LinkedDataPoint
         ComponentEndpoints = new List<LDPComponent>();
         foreach (Component c in gameObject.GetComponents(typeof(Component)))
         {
-            ComponentEndpoints.Add(new LDPComponent(gameObject, c));
+            if(c is LDComponent)
+                ComponentEndpoints.Add(new LDPComponent(gameObject, c));
         }
     }
 

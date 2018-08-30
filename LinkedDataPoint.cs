@@ -34,6 +34,7 @@ public abstract class LinkedDataPoint
 
     protected void initializeHttpListener(string uri)
     {
+        Debug.Log("Initializing Http Listener");
         this.uri = uri;
         Endpoint = new HttpListener();
         Endpoint.Prefixes.Add(uri);
@@ -43,7 +44,7 @@ public abstract class LinkedDataPoint
 
     protected void listen()
     {
-        Console.WriteLine("Listening");
+        Debug.Log("Listening");
         while (!Endpoint.IsListening)
             Thread.Sleep(10);
 
@@ -52,10 +53,10 @@ public abstract class LinkedDataPoint
             if (serializer != null)
             {
                 var c = Endpoint.GetContext();
-                Console.WriteLine("Received request on " + c.Request.Url);
+                Debug.Log("Received request on " + c.Request.Url);
                 serializer.SerializeTTL(LDPGraph, c);
             }
         }
-        Console.WriteLine("Shutting down datapoint " + uri);
+        Debug.Log("Shutting down datapoint " + uri);
     }
 }

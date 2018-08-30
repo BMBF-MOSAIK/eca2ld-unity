@@ -16,7 +16,7 @@ namespace Assets.Scripts.ECA2LD
         public EntityLDPGraph(Uri u, GameObject o) : base(u)
         {
             this.gameObject = o;
-            n_e = RDFGraph.CreateLiteralNode(o.GetComponent<LDEntity>().EntityName.ToString(), "xsd:string");
+            n_e = RDFGraph.CreateLiteralNode(o.GetComponent<LDEntity>().EntityName.ToString(), new Uri("xsd:string"));
             BuildRDFGraph();
         }
 

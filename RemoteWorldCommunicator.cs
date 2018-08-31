@@ -77,6 +77,10 @@ public class RemoteWorldCommunicator : MonoBehaviour
         UnityWebRequest request = new UnityWebRequest(RemoteUri, "POST");
         request.SetRequestHeader("Content-Type", "text/turtle");
         request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(serializedTTL));
-        var r = request.SendWebRequest();
+        request.SendWebRequest().completed += _ =>
+        {
+            if (request.isHttpError || request.isNetworkError)
+                Debug.LogError("[RemoteWorldCommunicator] Request to " + request.url + " returned an error: " + request.error);
+        };
     }
 }

@@ -14,10 +14,10 @@ public abstract class LinkedDataPoint
     protected HttpListener Endpoint;
     protected TTLSerializer serializer;
     protected LDPGraph LDPGraph;
-    protected string uri;
     protected bool isActive = true;
 
     public string Name;
+    public string Uri { get; protected set; }
 
     public virtual void Shutdown()
     {
@@ -39,7 +39,7 @@ public abstract class LinkedDataPoint
     protected void initializeHttpListener(string uri)
     {
         Debug.Log("Initializing Http Listener");
-        this.uri = uri;
+        Uri = uri;
         Endpoint = new HttpListener();
         Endpoint.Prefixes.Add(uri);
         Endpoint.Start();
@@ -59,11 +59,11 @@ public abstract class LinkedDataPoint
                 var c = Endpoint.GetContext();
                 Debug.Log("Received request on " + c.Request.Url);
                 if (LDPGraph is ValueGraph)
-                    serializer.SerializeJSON(LDPGraph as ValueGraph, c);
+                    serializer.SerializeJSONResponse(LDPGraph as ValueGraph, c);
                 else
-                    serializer.SerializeTTL(LDPGraph, c);
+                    serializer.SerializeTTLResponse(LDPGraph, c);
             }
         }
-        Debug.Log("Shutting down datapoint " + uri);
+        Debug.Log("Shutting down datapoint " + Uri);
     }
 }

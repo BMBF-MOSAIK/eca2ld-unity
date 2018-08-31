@@ -29,6 +29,15 @@ namespace Assets.Scripts.ECA2LD
             CreateAttributeDatapoints();
         }
 
+        public override void Shutdown()
+        {
+            foreach (LDPAttribute a in attributes)
+            {
+                a.Shutdown();
+            }
+
+            base.Shutdown();
+        }
         private void CreateAttributeDatapoints()
         {
             foreach (var f in c.GetType().GetFields())
@@ -39,7 +48,6 @@ namespace Assets.Scripts.ECA2LD
                     attributes.Add(new LDPAttribute(gameObject, new LDAttribute(c, f.Name, f.GetValue(c))));
                 }
             }
-
         }
     }
 }

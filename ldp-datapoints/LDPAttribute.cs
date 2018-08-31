@@ -17,10 +17,7 @@ namespace Assets.Scripts.ECA2LD
         {
             this.a = a;
             Name = a.Name;
-            string uri = "http://"
-                + gameObject.GetComponent<LDEntity>().HostAddress + ":"
-                + gameObject.GetComponent<LDEntity>().HostPort + "/"
-                + gameObject.GetComponent<LDEntity>().EntityName + "/"
+            string uri = gameObject.GetComponent<LDEntity>().Uri
                 + a.ParentComponent.GetType() + "/" + a.Name + "/";
             LDPGraph = new AttributeLDPGraph(new Uri(uri), a);
             initializeHttpListener(uri);

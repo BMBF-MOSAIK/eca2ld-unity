@@ -44,7 +44,7 @@ namespace Assets.Scripts.ECA2LD
                 var attr = (IsLDAttribute[])f.GetCustomAttributes(typeof(IsLDAttribute), false);
                 if (attr.Length > 0)
                 {
-                    attributes.Add(new LDPAttribute(gameObject, new LDAttribute(c, f.Name, f.GetValue(c))));
+                    attributes.Add(new LDPAttribute(gameObject, new LDAttribute(c, f.Name, f.FieldType, f.GetValue(c))));
                 }
             }
         }

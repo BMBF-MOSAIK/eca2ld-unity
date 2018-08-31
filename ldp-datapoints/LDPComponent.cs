@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.ECA2LD
 {
-    class LDPComponent : LinkedDataPoint
+    public class LDPComponent : LinkedDataPoint
     {
         private LDComponent c;
         private List<LDPAttribute> attributes = new List<LDPAttribute>();
@@ -18,6 +18,8 @@ namespace Assets.Scripts.ECA2LD
         public LDPComponent(GameObject gameObject, Component c) : base(gameObject)
         {
             this.c = c as LDComponent;
+            this.c.dataPoint = this;
+
             Name = c.GetType().ToString();
             string uri = "http://"
                 + gameObject.GetComponent<LDEntity>().HostAddress + ":"

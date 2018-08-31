@@ -20,7 +20,7 @@ using Assets.Scripts.ECA2LD;
 using Assets.Scripts.eca2ld_unity;
 using VDS.RDF;
 
-namespace ECA2LD.ldp_ttl
+namespace Assets.Scripts.ECA2LD
 {
     class AttributeLDPGraph : LDPGraph
     {

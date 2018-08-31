@@ -57,13 +57,23 @@ public abstract class LinkedDataPoint
             if (serializer != null)
             {
                 var c = Endpoint.GetContext();
-                Debug.Log("Received request on " + c.Request.Url);
-                if (LDPGraph is ValueGraph)
-                    serializer.SerializeJSONResponse(LDPGraph as ValueGraph, c);
-                else
-                    serializer.SerializeTTLResponse(LDPGraph, c);
+                if (c.Request.HttpMethod == "GET")
+                {
+                    Debug.Log("Received request on " + c.Request.Url);
+                    if (LDPGraph is ValueGraph)
+                        serializer.SerializeJSONResponse(LDPGraph as ValueGraph, c);
+                    else
+                        serializer.SerializeTTLResponse(LDPGraph, c);
+                }
+                else if (c.Request.HttpMethod == "POST")
+                {
+                    OnPost(c);
+                }
             }
         }
-        Debug.Log("Shutting down datapoint " + Uri);
+    }
+    protected virtual void OnPost(HttpListenerContext c)
+    {
+        throw new NotImplementedException();
     }
 }

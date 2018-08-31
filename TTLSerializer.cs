@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Text;
 using UnityEngine;
 using VDS.RDF;
 using VDS.RDF.Writing;
@@ -66,6 +68,29 @@ namespace Assets.Scripts.ECA2LD
                     c.Response.OutputStream.Close();
                 });
             }
+        }
+
+        public void DeserializeJSONRequest(HttpListenerContext c, Type targetType, Action<object> continuation)
+        {
+            c.Response.StatusCode = 200;
+            try
+            {
+                using (Stream input = c.Request.InputStream)
+                {
+                    using (StreamReader reader = new StreamReader(input, Encoding.UTF8))
+                    {
+                        var deserialized = JsonConvert.DeserializeObject(reader.ReadToEnd(),targetType);
+                        continuation(deserialized);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                c.Response.OutputStream.Write(Encoding.UTF8.GetBytes(e.Message), 0, e.Message.Length);
+                c.Response.StatusCode = 500;
+            }
+            c.Response.OutputStream.Close();
         }
 
         public void SerializeTTLRequest(Graph g, Action<string> continuation)

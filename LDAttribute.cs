@@ -12,6 +12,25 @@ namespace Assets.Scripts.ECA2LD
         public string Name { get; set; }
         public Type Type { get; set; }
 
+        public object Value
+        {
+            get
+            {
+                return ParentComponent.GetType().GetField(Name).GetValue(ParentComponent);
+            }
+            set
+            {
+                try
+                {
+                    ParentComponent.GetType().GetField(Name).SetValue(ParentComponent, value);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
+            }
+        }
+
         public LDComponent ParentComponent { get; private set; }
 
         private LDPValue valueDatapoint;

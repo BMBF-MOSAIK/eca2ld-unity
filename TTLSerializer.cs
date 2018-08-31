@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -40,6 +41,23 @@ namespace Assets.Scripts.ECA2LD
                 {
                     responseBuffer = System.Text.Encoding.UTF8.GetBytes(graph.GetTTL());
                     c.Response.ContentType = "text/turtle";
+                    c.Response.OutputStream.Write(responseBuffer, 0, responseBuffer.Length);
+                    c.Response.OutputStream.Flush();
+                    c.Response.OutputStream.Close();
+                });
+            }
+        }
+
+        public void SerializeJSON(ValueGraph graph, HttpListenerContext c)
+        {
+            byte[] responseBuffer;
+
+            lock (pendingActions)
+            {
+                pendingActions.Enqueue(() =>
+                {
+                    responseBuffer = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(graph.a.Value));
+                    c.Response.ContentType = "application/json";
                     c.Response.OutputStream.Write(responseBuffer, 0, responseBuffer.Length);
                     c.Response.OutputStream.Flush();
                     c.Response.OutputStream.Close();

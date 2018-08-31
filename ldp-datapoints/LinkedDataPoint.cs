@@ -30,7 +30,7 @@ public abstract class LinkedDataPoint
         this.gameObject = gameObject;
         Name = gameObject.GetComponent<LDEntity>().EntityName;
         serializer = gameObject.GetComponent<TTLSerializer>();
-        if(serializer == null)
+        if (serializer == null)
         {
             Debug.LogWarning("No TTL Serializer attached to entity " + Name + "! Attach TTL serializer to enable publishing as Linked Entity");
         }
@@ -58,7 +58,10 @@ public abstract class LinkedDataPoint
             {
                 var c = Endpoint.GetContext();
                 Debug.Log("Received request on " + c.Request.Url);
-                serializer.SerializeTTL(LDPGraph, c);
+                if (LDPGraph is ValueGraph)
+                    serializer.SerializeJSON(LDPGraph as ValueGraph, c);
+                else
+                    serializer.SerializeTTL(LDPGraph, c);
             }
         }
         Debug.Log("Shutting down datapoint " + uri);

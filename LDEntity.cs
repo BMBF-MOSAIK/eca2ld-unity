@@ -14,8 +14,12 @@ public class LDEntity : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Uri = "http://" + HostAddress + ":" + HostPort + "/" + EntityName + "/";
-        dataPoint = new LDPEntity(gameObject, HostAddress, HostPort);
+        var WorldCommunicator = FindObjectOfType<RemoteWorldCommunicator>();
+        if (WorldCommunicator != null)
+            Uri = WorldCommunicator.BaseUri.TrimEnd('/') + "/" + EntityName + "/";
+        else
+            Uri = "http://" + HostAddress + ":" + HostPort + "/" + EntityName + "/";
+        dataPoint = new LDPEntity(gameObject, Uri);
     }
 
     // Update is called once per frame

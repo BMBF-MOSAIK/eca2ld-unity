@@ -9,15 +9,15 @@ namespace Assets.Scripts.eca2ld_unity.ld_components
     public class LDPose : LDComponent
     {
         [IsLD]
-        public Vector3 Position;
+        public LDVector Position = new LDVector();
 
         [IsLD]
-        public Quaternion Orientation;
+        public LDQuat Orientation = new LDQuat();
 
         public void Update()
         {
-            Position = gameObject.transform.position;
-            Orientation = gameObject.transform.rotation;
+            Position.Set(gameObject.transform.position);
+            Orientation.Set(gameObject.transform.rotation);
         }
     }
 }

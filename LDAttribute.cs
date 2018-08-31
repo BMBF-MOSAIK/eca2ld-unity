@@ -21,5 +21,10 @@ namespace Assets.Scripts.ECA2LD
             Value = value;
             valueDatapoint = new LDPValue(parentComponent.gameObject, this);
         }
+
+        public void Shutdown()
+        {
+            valueDatapoint.Shutdown();
+        }
     }
 }

@@ -26,5 +26,11 @@ namespace Assets.Scripts.ECA2LD
             initializeHttpListener(uri);
         }
 
+        public override void Shutdown()
+        {
+            a.Shutdown();
+            base.Shutdown();
+        }
+
     }
 }

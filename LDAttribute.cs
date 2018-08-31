@@ -12,11 +12,14 @@ namespace Assets.Scripts.ECA2LD
         public object Value { get; set; }
         public LDComponent ParentComponent { get; private set; }
 
+        private LDPValue valueDatapoint;
+
         public LDAttribute(LDComponent parentComponent, string name, object value)
         {
             ParentComponent = parentComponent;
             Name = name;
             Value = value;
+            valueDatapoint = new LDPValue(parentComponent.gameObject, this);
         }
     }
 }

@@ -32,13 +32,12 @@ public abstract class LinkedDataPoint
         serializer = gameObject.GetComponent<TTLSerializer>();
         if (serializer == null)
         {
-            Debug.LogWarning("No TTL Serializer attached to entity " + Name + "! Attach TTL serializer to enable publishing as Linked Entity");
+            Debug.LogError("No TTL Serializer attached to entity " + Name + "! Attach TTL serializer to enable publishing as Linked Entity");
         }
     }
 
     protected void initializeHttpListener(string uri)
     {
-        Debug.Log("Initializing Http Listener");
         Uri = uri;
         Endpoint = new HttpListener();
         Endpoint.Prefixes.Add(uri);
@@ -48,7 +47,6 @@ public abstract class LinkedDataPoint
 
     protected void listen()
     {
-        Debug.Log("Listening");
         while (!Endpoint.IsListening)
             Thread.Sleep(10);
 

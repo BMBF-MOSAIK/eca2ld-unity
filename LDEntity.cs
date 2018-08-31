@@ -5,7 +5,8 @@ using UnityEngine;
 public class LDEntity : MonoBehaviour
 {
 
-    LDPEntity entity;
+    public LDPEntity dataPoint { get; private set; }
+    public string Uri { get; private set; }
     public string EntityName;
     public string HostAddress = "localhost";
     public int HostPort = 12345;
@@ -13,7 +14,8 @@ public class LDEntity : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        entity = new LDPEntity(gameObject, HostAddress, HostPort);
+        Uri = "http://" + HostAddress + ":" + HostPort + "/" + EntityName + "/";
+        dataPoint = new LDPEntity(gameObject, HostAddress, HostPort);
     }
 
     // Update is called once per frame
@@ -24,6 +26,6 @@ public class LDEntity : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        entity.Shutdown();
+        dataPoint.Shutdown();
     }
 }

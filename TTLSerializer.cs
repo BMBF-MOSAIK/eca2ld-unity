@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
+using VDS.RDF;
+using VDS.RDF.Writing;
 
 namespace Assets.Scripts.ECA2LD
 {
@@ -11,6 +13,7 @@ namespace Assets.Scripts.ECA2LD
     {
 
         protected Queue<Action> pendingActions;
+        private CompressingTurtleWriter writer = new CompressingTurtleWriter();
 
         // Use this for initialization
         void Start()
@@ -31,7 +34,7 @@ namespace Assets.Scripts.ECA2LD
             }
         }
 
-        public void SerializeTTL(LDPGraph graph, HttpListenerContext c)
+        public void SerializeTTLResponse(LDPGraph graph, HttpListenerContext c)
         {
             byte[] responseBuffer;
 
@@ -48,7 +51,7 @@ namespace Assets.Scripts.ECA2LD
             }
         }
 
-        public void SerializeJSON(ValueGraph graph, HttpListenerContext c)
+        public void SerializeJSONResponse(ValueGraph graph, HttpListenerContext c)
         {
             byte[] responseBuffer;
 
@@ -62,6 +65,16 @@ namespace Assets.Scripts.ECA2LD
                     c.Response.OutputStream.Flush();
                     c.Response.OutputStream.Close();
                 });
+            }
+        }
+
+        public void SerializeTTLRequest(Graph g, Action<string> continuation)
+        {
+            lock (pendingActions)
+            {
+                System.IO.StringWriter sw = new System.IO.StringWriter();
+                writer.Save(g, sw);
+                continuation(sw.ToString());
             }
         }
     }

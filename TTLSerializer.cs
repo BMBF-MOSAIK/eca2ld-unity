@@ -61,8 +61,11 @@ namespace Assets.Scripts.ECA2LD
             {
                 pendingActions.Enqueue(() =>
                 {
-                    responseBuffer = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(graph.a.Value));
-                    c.Response.ContentType = "application/json";
+                    bool isString = graph.a.Type.Equals(typeof(string));
+                    string content = isString ? graph.a.Value as string : JsonConvert.SerializeObject(graph.a.Value);
+
+                    responseBuffer = System.Text.Encoding.UTF8.GetBytes(content);
+                    c.Response.ContentType = isString ? "text/plain" : "application/json";
                     c.Response.OutputStream.Write(responseBuffer, 0, responseBuffer.Length);
                     c.Response.OutputStream.Flush();
                     c.Response.OutputStream.Close();
@@ -79,7 +82,7 @@ namespace Assets.Scripts.ECA2LD
                 {
                     using (StreamReader reader = new StreamReader(input, Encoding.UTF8))
                     {
-                        var deserialized = JsonConvert.DeserializeObject(reader.ReadToEnd(),targetType);
+                        var deserialized = JsonConvert.DeserializeObject(reader.ReadToEnd(), targetType);
                         continuation(deserialized);
                     }
                 }

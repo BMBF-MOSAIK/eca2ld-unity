@@ -25,7 +25,7 @@ public class RemoteWorldCommunicator : MonoBehaviour
     /// </summary>
     public List<GameObject> Entities = new List<GameObject>();
 
-    bool sent = false;
+    public bool sent = false;
 
     // Use this for initialization
     void Update()

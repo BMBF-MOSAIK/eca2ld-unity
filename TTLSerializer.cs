@@ -26,12 +26,15 @@ namespace Assets.Scripts.ECA2LD
         // Update is called once per frame
         void Update()
         {
-            lock (pendingActions)
+            if (pendingActions != null)
             {
-                if (pendingActions.Count > 0)
+                lock (pendingActions)
                 {
-                    var action = pendingActions.Dequeue();
-                    action.Invoke();
+                    if (pendingActions.Count > 0)
+                    {
+                        var action = pendingActions.Dequeue();
+                        action.Invoke();
+                    }
                 }
             }
         }

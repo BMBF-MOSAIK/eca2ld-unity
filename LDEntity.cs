@@ -30,6 +30,7 @@ public class LDEntity : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        dataPoint.Shutdown();
+        if (dataPoint != null)
+            dataPoint.Shutdown();
     }
 }

@@ -67,10 +67,19 @@ public abstract class LinkedDataPoint
                 {
                     OnPost(c);
                 }
+                else if (c.Request.HttpMethod == "PUT")
+                {
+                    OnPut(c);
+                }
             }
         }
     }
     protected virtual void OnPost(HttpListenerContext c)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected virtual void OnPut(HttpListenerContext c)
     {
         throw new NotImplementedException();
     }

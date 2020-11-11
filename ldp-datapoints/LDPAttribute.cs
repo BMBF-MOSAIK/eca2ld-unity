@@ -17,10 +17,9 @@ namespace Assets.Scripts.ECA2LD
         {
             this.a = a;
             Name = a.Name;
-            string uri = gameObject.GetComponent<LDEntity>().Uri
-                + a.ParentComponent.GetType() + "/" + a.Name + "/";
-            LDPGraph = new AttributeLDPGraph(new Uri(uri), a);
-            initializeHttpListener(uri);
+            Uri = gameObject.GetComponent<LDEntity>().Uri + a.ParentComponent.GetType() + "/" + a.Name + "/";
+            LDPGraph = new AttributeLDPGraph(new Uri(Uri), a);
+            initializeHttpListener(Uri);
         }
 
         public override void Shutdown()

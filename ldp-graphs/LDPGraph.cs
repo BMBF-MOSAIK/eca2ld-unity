@@ -23,6 +23,7 @@ namespace Assets.Scripts.ECA2LD
         protected IUriNode DCT_IS_PART_OF;
         protected IUriNode RDFS_IS_DEFINED_BY;
         protected IUriNode RDF_VALUE;
+        protected IUriNode ECA_VALUE;
 
         /// <summary>
         /// RDF OBJECT NODES
@@ -61,6 +62,7 @@ namespace Assets.Scripts.ECA2LD
             RDFGraph.NamespaceMap.AddNamespace("ldp", new Uri("http://www.w3.org/ns/ldp#"));
             RDFGraph.NamespaceMap.AddNamespace("dct", new Uri("http://purl.org/dc/terms/"));
             RDFGraph.NamespaceMap.AddNamespace("rdfs", new Uri("http://www.w3.org/2000/01/rdf-schema#"));
+            RDFGraph.NamespaceMap.AddNamespace("eca", new Uri("http://www.dfki.de/eca2ld/0.1/"));
         }
 
         protected void addPredicateNodes()
@@ -73,6 +75,7 @@ namespace Assets.Scripts.ECA2LD
             DCT_IS_PART_OF = RDFGraph.CreateUriNode("dct:isPartOf");
             RDFS_IS_DEFINED_BY = RDFGraph.CreateUriNode("rdfs:isDefinedBy");
             RDF_VALUE = RDFGraph.CreateUriNode("rdf:value");
+            ECA_VALUE = RDFGraph.CreateUriNode("eca:value");
         }
 
         protected void addObjectNodes()

@@ -26,12 +26,15 @@ namespace Assets.Scripts.ECA2LD
         // Update is called once per frame
         void Update()
         {
-            lock (pendingActions)
+            if (pendingActions != null)
             {
-                if (pendingActions.Count > 0)
+                lock (pendingActions)
                 {
-                    var action = pendingActions.Dequeue();
-                    action.Invoke();
+                    if (pendingActions.Count > 0)
+                    {
+                        var action = pendingActions.Dequeue();
+                        action.Invoke();
+                    }
                 }
             }
         }
@@ -62,7 +65,7 @@ namespace Assets.Scripts.ECA2LD
                 pendingActions.Enqueue(() =>
                 {
                     bool isString = graph.a.Type.Equals(typeof(string));
-                    string content = isString ? graph.a.Value as string : JsonConvert.SerializeObject(graph.a.Value);
+                    string content = isString ? graph.a.Value as string : JsonConvert.SerializeObject(graph.a.Value, new Newtonsoft.Json.Converters.StringEnumConverter());
 
                     responseBuffer = System.Text.Encoding.UTF8.GetBytes(content);
                     c.Response.ContentType = isString ? "text/plain" : "application/json";

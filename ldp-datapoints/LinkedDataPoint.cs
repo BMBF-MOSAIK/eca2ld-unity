@@ -57,6 +57,19 @@ public abstract class LinkedDataPoint
                 var c = Endpoint.GetContext();
                 if (c.Request.HttpMethod == "GET")
                 {
+                    try
+                    {
+                        LDPGraph.BuildRDFGraph();
+                    }
+                    catch (Exception ex)
+                    {
+                        c.Response.StatusCode = 500;
+                        byte[] responseBuffer = responseBuffer = System.Text.Encoding.UTF8.GetBytes("An error occurred while rebuilding LDP Graph: " + ex.Message);
+                        c.Response.OutputStream.Write(responseBuffer, 0, responseBuffer.Length);
+                        c.Response.OutputStream.Flush();
+                        c.Response.OutputStream.Close();
+                        return;
+                    }
                     Debug.Log("Received request on " + c.Request.Url);
                     if (LDPGraph is ValueGraph)
                         serializer.SerializeJSONResponse(LDPGraph as ValueGraph, c);
@@ -67,10 +80,19 @@ public abstract class LinkedDataPoint
                 {
                     OnPost(c);
                 }
+                else if (c.Request.HttpMethod == "PUT")
+                {
+                    OnPut(c);
+                }
             }
         }
     }
     protected virtual void OnPost(HttpListenerContext c)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected virtual void OnPut(HttpListenerContext c)
     {
         throw new NotImplementedException();
     }

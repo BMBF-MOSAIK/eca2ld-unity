@@ -21,11 +21,10 @@ namespace Assets.Scripts.ECA2LD
             this.c.dataPoint = this;
 
             Name = c.GetType().ToString();
-            string uri = gameObject.GetComponent<LDEntity>().Uri
-                + c.GetType() + "/";
-            LDPGraph = new ComponentLDPGraph(new Uri(uri), c);
-            initializeHttpListener(uri);
+            Uri = gameObject.GetComponent<LDEntity>().Uri + c.GetType() + "/";
+            initializeHttpListener(Uri);
             CreateAttributeDatapoints();
+            LDPGraph = new ComponentLDPGraph(new Uri(Uri), c);
         }
 
         public override void Shutdown()

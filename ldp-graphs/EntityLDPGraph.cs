@@ -13,16 +13,19 @@ namespace Assets.Scripts.ECA2LD
     {
         private ILiteralNode n_e;
         private GameObject gameObject;
+        private Component[] components;
 
         public EntityLDPGraph(Uri u, GameObject o) : base(u)
         {
             this.gameObject = o;
             n_e = RDFGraph.CreateLiteralNode(o.GetComponent<LDEntity>().EntityName.ToString(), new Uri("xsd:string"));
+            components = gameObject.GetComponents(typeof(Component));
             BuildRDFGraph();
         }
 
-        protected override void BuildRDFGraph()
+        public override void BuildRDFGraph()
         {
+            RDFGraph.Clear();
             RDFGraph.Assert(new Triple(un, RDF_TYPE, LDP_DIRECT_CONTAINER));
             RDFGraph.Assert(new Triple(un, DCT_IDENTIFIER, n_e));
             RDFGraph.Assert(new Triple(un, LDP_HASMEMBERRELATION, DCT_HAS_PART));
@@ -31,7 +34,6 @@ namespace Assets.Scripts.ECA2LD
 
         private void addComponentNodes()
         {
-            var components = gameObject.GetComponents(typeof(Component));
             foreach (Component c in components)
             {
                 if (c is LDComponent)

@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Assets.Scripts.ECA2LD;
 using Assets.Scripts.eca2ld_unity;
 using VDS.RDF;
+using UnityEngine;
 
 namespace Assets.Scripts.ECA2LD
 {
@@ -43,10 +44,14 @@ namespace Assets.Scripts.ECA2LD
             RDFGraph.Assert(new Triple(un, RDF_TYPE, RDFGraph.CreateUriNode(new Uri(typeRoute))));
         }
 
-        protected override void BuildRDFGraph()
+        public override void BuildRDFGraph()
         {
+            RDFGraph.Clear();
             buildRDFBaseGraph();
-            RDFGraph.Assert(new Triple(un, RDF_VALUE, RDFGraph.CreateUriNode(new Uri(dp_uri + "/value/"))));
+
+            RDFGraph.Assert(new Triple(un, ECA_VALUE, RDFGraph.CreateUriNode(new Uri(dp_uri + "value/"))));
+            string serializedAttributeValue = Newtonsoft.Json.JsonConvert.SerializeObject(attribute.Value, new Newtonsoft.Json.Converters.StringEnumConverter());
+            RDFGraph.Assert(new Triple(un, RDF_VALUE, RDFGraph.CreateLiteralNode(serializedAttributeValue)));
         }
 
         private void buildRDFBaseGraph()

@@ -13,7 +13,7 @@ namespace Assets.Scripts.ECA2LD
             this.a = a;
         }
 
-        protected override void BuildRDFGraph()
+        public override void BuildRDFGraph()
         {
             // nothing to do here, as Graph will just work as accessor to attribute, which is admittedly not very beautiful,
             // but helps to cope with Unity Threading behaviour, as by this, we can just re-use the HttpListener that we wrote

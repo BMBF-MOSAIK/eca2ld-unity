@@ -82,6 +82,6 @@ namespace Assets.Scripts.ECA2LD
             XSD_STRING = RDFGraph.CreateUriNode("xsd:string");
         }
 
-        protected virtual void BuildRDFGraph() { }
+        public virtual void BuildRDFGraph() { }
     }
 }

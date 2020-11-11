@@ -21,8 +21,9 @@ namespace Assets.Scripts.ECA2LD
             BuildRDFGraph();
         }
 
-        protected override void BuildRDFGraph()
+        public override void BuildRDFGraph()
         {
+            RDFGraph.Clear();
             RDFGraph.Assert(new Triple(un, RDF_TYPE, LDP_DIRECT_CONTAINER));
             RDFGraph.Assert(new Triple(un, DCT_IDENTIFIER, n_e));
             RDFGraph.Assert(new Triple(un, LDP_HASMEMBERRELATION, DCT_HAS_PART));

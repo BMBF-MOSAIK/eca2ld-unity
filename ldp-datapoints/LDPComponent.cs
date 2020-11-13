@@ -36,8 +36,20 @@ namespace Assets.Scripts.ECA2LD
 
             base.Shutdown();
         }
+
         private void CreateAttributeDatapoints()
         {
+            foreach (var p in c.GetType().GetProperties())
+            {
+                var attr = (IsLDAttribute[])p.GetCustomAttributes(typeof(IsLDAttribute), false);
+                if (attr.Length > 0)
+                {
+                    Type attributeType = p.PropertyType;
+                    var attributeValue = p.GetValue(c);
+                    LDAttribute attribute = new LDAttribute(c, p.Name, attributeType, attributeValue);
+                    attributes.Add(new LDPAttribute(gameObject, attribute));
+                }
+            }
             foreach (var f in c.GetType().GetFields())
             {
                 var attr = (IsLDAttribute[])f.GetCustomAttributes(typeof(IsLDAttribute), false);

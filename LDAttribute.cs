@@ -16,13 +16,19 @@ namespace Assets.Scripts.ECA2LD
         {
             get
             {
-                return ParentComponent.GetType().GetField(Name).GetValue(ParentComponent);
+                bool isProperty = ParentComponent.GetType().GetProperty(Name) != null;
+                return isProperty ? ParentComponent.GetType().GetProperty(Name).GetValue(ParentComponent)
+                    : ParentComponent.GetType().GetField(Name).GetValue(ParentComponent);
             }
             set
             {
                 try
                 {
-                    ParentComponent.GetType().GetField(Name).SetValue(ParentComponent, value);
+                    bool isProperty = ParentComponent.GetType().GetProperty(Name) != null;
+                    if(isProperty)
+                        ParentComponent.GetType().GetProperty(Name).SetValue(ParentComponent, value);
+                    else
+                        ParentComponent.GetType().GetField(Name).SetValue(ParentComponent, value);
                 }
                 catch (Exception e)
                 {
